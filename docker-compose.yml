@@ -19,7 +19,9 @@ services:
   gnuboard:
     depends_on:
       - gnudb
-    image: gnuboard-fpm-alpine:1.0.0
+    build:
+        context: .
+        dockerfile: ./Dockerfile
     container_name: gnuboard
     restart: unless-stopped
     env_file: .env
