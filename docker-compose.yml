@@ -1,0 +1,79 @@
+version: '3'
+
+services:
+
+  gnudb:
+    image: mariadb:latest
+    container_name: gnudb
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      - MYSQL_DATABASE=gnuboard
+    volumes:
+      - ./dbdata:/var/lib/mysql
+    networks:
+      - app-network
+    ports:
+      - "3309:3006"
+
+  gnuboard:
+    depends_on:
+      - gnudb
+    image: gnuboard-fpm-alpine:1.0.0
+    container_name: gnuboard
+    restart: unless-stopped
+    env_file: .env
+    volumes:
+      - ./gnuboard:/var/www/html
+      - ./php/php.ini:/usr/local/etc/php/php.ini
+    networks:
+      - app-network
+
+  nginx:
+    depends_on:
+      - gnuboard
+    image: nginx:alpine
+    container_name: nginx
+    restart: unless-stopped
+    ports:
+      - "8009:80"
+      - "444:443"
+    volumes:
+      - ./gnuboard:/var/www/html
+      - ./nginx-conf:/etc/nginx/conf.d
+      - ./certbot-etc:/etc/letsencrypt
+    networks:
+      - app-network
+
+  certbot:
+    depends_on:
+      - nginx
+    image: certbot/certbot
+    container_name: certbot
+    volumes:
+      - ./certbot-etc:/etc/letsencrypt
+      - ./gnuboard:/var/www/html
+    command: certonly --webroot --webroot-path=/var/www/html --email bravemaster619@hotmail.com --agree-tos --no-eff-email --staging -d example.com -d www.example.com
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin
+    ports:
+      - "8081:80"
+    environment:
+      - PMA_HOST=gnudb
+    restart: always
+    depends_on:
+      - gnudb
+    networks:
+      - app-network
+
+volumes:
+  certbot-etc:
+  gnuboard:
+  dbdata:
+  nginx-conf:
+
+networks:
+  app-network:
+    driver: bridge
