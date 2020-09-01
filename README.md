@@ -2,6 +2,8 @@
 
 This is a dockerized [gnuboard5](https://github.com/gnuboard/gnuboard5) container
 
+This repository was made following [this guide](https://www.wsgvet.com/bbs/board.php?bo_table=ubuntu&wr_id=105).
+
 # INSTALLATION
 
 - Create configuration files:
