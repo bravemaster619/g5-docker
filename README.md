@@ -6,7 +6,7 @@ This repository was made following [this guide](https://www.wsgvet.com/bbs/board
 
 # INSTALLATION
 
-- Create configuration files:
+## Create configuration files:
 
 ```console
 $ cp .env.example .env
@@ -14,11 +14,18 @@ $ cp php/php.example.ini php/php.ini
 $ cp nginx-conf/nginx.example.conf nginx-conf/nginx.conf
 ```
 
-- Run docker compose:
+## Run docker compose:
 
 ```console
 $ docker-compose up -d
 ```
+
+## Visit http://localhost:8009 to finish installation
+    
+- `Host` should be set as `gnudb`. This is mariadb container name
+- `User` is `MYSQL_USER` in `.env` file
+- `Password` is `MYSQL_PASSWORD` in `.env` file
+- `DB` is `MYSQL_DATABASE` environment variable in `docker-compose.yml`
 
 # CONTAINTER OUTPUTS
 
