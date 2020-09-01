@@ -10,7 +10,7 @@ services:
     environment:
       - MYSQL_DATABASE=gnuboard
     volumes:
-      - ./dbdata:/var/lib/mysql
+      - ./dbdata:/var/lib/mysql --user 1000
     networks:
       - app-network
     ports:
